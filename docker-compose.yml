@@ -1,0 +1,43 @@
+version: "3.6"
+services:
+  # next-graphql:
+  #   container_name: next_graphql
+  #   depends_on:
+  #     - postgres
+  #   restart: always
+  #   build: .
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - DB_URL=mongodb://mongo_db
+  #     - GRAPHQL_URI=http://localhost:3000/api/graphql-data
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/.next
+  #     - /usr/src/app/node_modules
+  # redis:
+  #   image: redis:alpine
+  #   restart: always
+  #   command: redis-server --requirepass redis_password
+  #   volumes:
+  #     - redis_data:/var/lib/redis/data
+  #     # - redis_data/redis.conf:/var/lib/redis/data/redis.conf
+  #   environment:
+  #     REDIS_REPLICATION_MODE: master
+  #   ports:
+  #     - 6379:6379
+  postgres:
+    container_name: postgres
+    image: postgres:12.4-alpine
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    # networks:
+    #   - backend
+volumes:
+  db_data:
+  # redis_data:
