@@ -1,4 +1,4 @@
-# React Query real-time refetch example with Socket.io (v3) and Next.js API Routes (v10.0.x)
+# React Query real-time refetch example<br/>with Socket.io (v3) and Next.js API Routes (v10.0.x)
 
 ## NEW UPDATE
 

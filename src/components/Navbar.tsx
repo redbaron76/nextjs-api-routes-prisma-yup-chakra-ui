@@ -39,7 +39,7 @@ const Navbar = (props: any) => {
     >
       <Flex align="center" mr={5}>
         <Heading as="h1" size="lg">
-          Application
+          RT Demo App
         </Heading>
       </Flex>
       <Box>
