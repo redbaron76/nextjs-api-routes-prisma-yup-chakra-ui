@@ -6,7 +6,9 @@ import Navbar from "../Navbar";
 import { User } from "@prisma/client";
 import { HTTP } from "src/utils/http";
 
-const initialContext: IAuthContext = {};
+const initialContext: IAuthContext = {
+  userLogged: false,
+};
 
 export const AuthContext: React.Context<IAuthContext> = React.createContext(
   initialContext
@@ -28,7 +30,11 @@ const AuthLayout: React.FC = ({ children }) => {
         </Center>
       ) : (
         <AuthContext.Provider
-          value={{ userId: data?.id || null, userData: data }}
+          value={{
+            userId: data?.id || null,
+            userData: data,
+            userLogged: !!data,
+          }}
         >
           <Navbar />
           {children}

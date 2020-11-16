@@ -78,8 +78,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const prisma = new PrismaClient({ log: ["query", "info"] });
     const { userId, count } = await getUserId(req);
 
-    console.log(userId, count);
-
     if (!userId) {
       res.status(200).json({ user: null });
       return;

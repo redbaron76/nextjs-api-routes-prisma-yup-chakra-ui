@@ -1,16 +1,16 @@
-import React, { useContext, MouseEvent } from "react";
+import React, { useContext } from "react";
 import { useMutation, queryCache } from "react-query";
 import { Box, Flex, Heading, Text, Link } from "@chakra-ui/core";
 import { AuthContext } from "src/components/layouts/AuthLayout";
-import { IAuthContext } from "src/interfaces/user";
+import { IAuthContext, IMeUser } from "src/interfaces/user";
 import { HTTP } from "src/utils/http";
 
 interface LogoutResponse {
   success: boolean;
 }
 
-const Navbar = (props) => {
-  const { userData, userId } = useContext(AuthContext);
+const Navbar = (props: any) => {
+  const { userLogged, userData, userId } = useContext(AuthContext);
 
   const logoutUser = async () => {
     const response = await HTTP("/api/auth/logout", "POST", {
@@ -22,7 +22,7 @@ const Navbar = (props) => {
   const [logout] = useMutation<LogoutResponse>(logoutUser, {
     onSuccess: ({ success }) => {
       // reset AuthContext on logout
-      if (success) return queryCache.setQueryData<IAuthContext>("me", {});
+      if (success) return queryCache.setQueryData<IMeUser | null>("me", null);
     },
   });
 
@@ -44,7 +44,7 @@ const Navbar = (props) => {
       </Flex>
       <Box>
         <Text>{userData?.email || "Please, signup!"}</Text>
-        {userId && (
+        {userLogged && (
           <Text>
             (<Link onClick={logout}>logout</Link>)
           </Text>

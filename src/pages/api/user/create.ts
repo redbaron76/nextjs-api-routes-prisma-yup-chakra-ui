@@ -1,13 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponseServerIO } from "src/types/next";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { IUserCreate } from "src/interfaces/user";
 import { validUserCreate } from "src/utils/validators/user";
 import { generateErrors } from "src/utils/validation";
-import { ValidationError } from "yup";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponseServerIO) => {
   if (req.method === "POST") {
     const prisma = new PrismaClient({ log: ["query", "info"] });
     const { create: data }: { create: IUserCreate } = req.body;
@@ -20,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           delete data.confirmPassword;
           try {
             data.password = await bcrypt.hash(data.password, 12);
-            await prisma.user.create({
+            const newUser = await prisma.user.create({
               data: {
                 ...data,
                 profile: {
@@ -30,7 +30,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 },
               },
             });
-            res.status(201).json({ user: data });
+
+            // Trigger event in useQuerySocket
+            res.socket.server.io.emit("users", newUser);
+
+            res.status(201).json({ data });
           } catch (err) {
             console.log("ERR", err);
             res.status(400).end();

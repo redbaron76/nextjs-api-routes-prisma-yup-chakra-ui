@@ -14,6 +14,7 @@ export interface IMeUser {
 export interface IAuthContext {
   userId?: number | null;
   userData?: IMeUser | null;
+  userLogged: boolean;
 }
 
 // LOGIN

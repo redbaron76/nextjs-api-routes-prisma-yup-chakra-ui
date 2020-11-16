@@ -1,7 +1,9 @@
+import { useContext } from "react";
 import Head from "next/head";
-import { useQuery } from "react-query";
+import { AuthContext } from "src/components/layouts/AuthLayout";
 import { Box, Flex, List, ListItem } from "@chakra-ui/core";
 import CreateUserForm from "src/components/forms/CreateUserForm";
+import useQuerySocket from "src/utils/hooks/useQuerySocket";
 import LoginForm from "src/components/forms/LoginForm";
 import { User } from "@prisma/client";
 import { HTTP } from "src/utils/http";
@@ -13,10 +15,13 @@ async function fetchUsers(): Promise<User[]> {
 }
 
 export default function Home() {
-  const { data: users, error } = useQuery<User[]>("users", fetchUsers);
+  const { userLogged } = useContext(AuthContext);
+  const { data: users, isLoading } = useQuerySocket<User[]>(
+    "users",
+    fetchUsers
+  );
 
-  if (error) return <span>Error loading data</span>;
-  if (!users) return <span>Loading...</span>;
+  if (!users || isLoading) return <span>Loading...</span>;
 
   return (
     <Box p="10">
@@ -38,9 +43,11 @@ export default function Home() {
             ))}
           </List>
         </Box>
-        <Box flex="1" p="5">
-          <LoginForm />
-        </Box>
+        {!userLogged && (
+          <Box flex="1" p="5">
+            <LoginForm />
+          </Box>
+        )}
       </Flex>
     </Box>
   );
