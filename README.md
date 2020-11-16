@@ -1,3 +1,21 @@
+# React Query real-time refetch example with Socket.io (v3) and Next.js API Routes (v10.0.x)
+
+## NEW UPDATE
+
+This boilerplate now implements **Socket.io** in **Next.js API routes** to give RT functionalities to **React Query**.
+
+- A custom **useQuerySocket** hook takes care to subscribe to a socket.io event name with the same value of the **cache key**.
+- **On the server**, notifications are emitted by the REST method when a new user has been created.
+- **On the client**, the hook is listening for any message emitted by the server, performing a new **refetch** for all the queries that are using the same cache key.
+
+**TRY IT IN ACTION:**
+
+1. Open two different browser windows and register a new user in one of them.
+
+2. The second browser window will refresh user's list in **real-time**
+
+## What is it?
+
 This is an experimental full-stack boilerplate which puts together **Next.js** v10.0.1, **API routes** and **Prisma v2** as backend + **Yup** schema for server-side validation and **Chakra UI** + **react-query** on the frontend.
 
 Prisma v2 connects to a **PostgreSQL** database provided by the docker-compose file
